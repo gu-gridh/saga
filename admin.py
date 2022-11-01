@@ -3,69 +3,85 @@ from django.contrib import admin
 from django.contrib.gis.db import models
 from .models import *
 import diana.abstract.models
-from diana.abstract.models import DEFAULT_EXCLUDE, DEFAULT_FIELDS, get_many_to_many_fields
+from diana.abstract.models import DEFAULT_EXCLUDE, DEFAULT_FIELDS, get_fields
 from django.contrib.gis import admin
 from django.contrib.admin.widgets import AdminFileWidget
 from django.utils.safestring import mark_safe
 
-def get_fields(model: models.Model):
-
-    exclude = DEFAULT_EXCLUDE 
-    fields  = [field for field in diana.abstract.models.get_fields(model) if field not in exclude]
-    return fields
 
 # Register your models here.
 @admin.register(Archive)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Archive) + DEFAULT_FIELDS 
-
-@admin.register(Edition)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Edition) + DEFAULT_FIELDS 
-
-@admin.register(Illustration)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Illustration) + DEFAULT_FIELDS 
-
-@admin.register(Person)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Person) + DEFAULT_FIELDS 
+class SagaArchiveAdmin(admin.ModelAdmin):
+    list_display = get_fields(Archive, exclude=DEFAULT_EXCLUDE+["id"])
 
 @admin.register(Place)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Place) + DEFAULT_FIELDS 
+class SagaPlaceAdmin(admin.ModelAdmin):
+    list_display = get_fields(Place) 
 
 @admin.register(Publisher)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Publisher) + DEFAULT_FIELDS 
-
-@admin.register(SagaText)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(SagaText) + DEFAULT_FIELDS 
+class SagaPublisherAdmin(admin.ModelAdmin):
+    list_display = get_fields(Publisher) 
 
 @admin.register(Series)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Series) + DEFAULT_FIELDS 
+class SagaSeriesAdmin(admin.ModelAdmin):
+    list_display = get_fields(Series) 
 
 @admin.register(Volume)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Volume) + DEFAULT_FIELDS 
+class SagaVolumeAdmin(admin.ModelAdmin):
+    list_display = get_fields(Volume) 
 
 @admin.register(Role)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(Role) + DEFAULT_FIELDS 
+class SagaRoleAdmin(admin.ModelAdmin):
+    list_display = get_fields(Role) 
 
-@admin.register(RelIllustrEdition)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(RelIllustrEdition) 
-@admin.register(RelPersonIllustration)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(RelPersonIllustration) 
 
-@admin.register(RelPersonText)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(RelPersonText) 
+class RelIllustrEditionAdmin(admin.TabularInline):
+    model = RelIllustrEdition
+    extra = 1
 
-@admin.register(RelTextEdition)
-class SagaAdmin(admin.ModelAdmin):
-    list_display = get_fields(RelTextEdition)  
+class RelPersonIllustrationAdmin(admin.TabularInline):
+    model = RelPersonIllustration
+    extra = 1
+
+class RelPersonTextAdmin(admin.TabularInline):
+    model = RelPersonText
+    extra = 1
+
+class RelTextEditionAdmin(admin.TabularInline):
+    model = RelTextEdition
+    extra = 1
+   
+
+class SagaEditionAdmin(admin.ModelAdmin):
+    list_display = get_fields(Edition, exclude=DEFAULT_EXCLUDE+["id"]) 
+    inlines = [
+            RelIllustrEditionAdmin,
+            RelTextEditionAdmin,
+        ]
+
+class SagaIllustrationAdmin(admin.ModelAdmin):
+    list_display = get_fields(Illustration, exclude=DEFAULT_EXCLUDE+["id"])
+    inlines =  [
+        RelIllustrEditionAdmin,
+        RelPersonIllustrationAdmin,
+        ]
+
+class SagaPersonAdmin(admin.ModelAdmin):
+    list_display = get_fields(Person, exclude=DEFAULT_EXCLUDE+["id"])  
+    inlines = [
+            RelPersonIllustrationAdmin, 
+            RelPersonTextAdmin,
+            ]
+
+class SagaTextAdmin(admin.ModelAdmin):
+    list_display = get_fields(SagaText, exclude=DEFAULT_EXCLUDE+["id"])  
+    inlines = [
+            RelPersonTextAdmin,
+            RelTextEditionAdmin
+    ]
+
+
+admin.site.register(Edition, SagaEditionAdmin)
+admin.site.register(Illustration, SagaIllustrationAdmin)
+admin.site.register(Person, SagaPersonAdmin)
+admin.site.register(SagaText, SagaTextAdmin)
