@@ -24,7 +24,7 @@ class Archive(abstract.AbstractBaseModel):
     notes = models.TextField(verbose_name= _("notes"), null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     class Meta:
         verbose_name = _("archive")
@@ -36,7 +36,7 @@ class ArtForm(abstract.AbstractBaseModel):
     title = models.CharField(max_length=255, verbose_name= _("title"), null=True, blank=True)
     
     def __str__(self):
-        return self.formname
+        return f"{self.formname}"
 
     class Meta:
         verbose_name = _("art form")
@@ -57,7 +57,7 @@ class Edition(abstract.AbstractBaseModel):
     notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return f"{self.title}"
 
     class Meta:
         verbose_name = _("edition")
@@ -66,15 +66,15 @@ class Edition(abstract.AbstractBaseModel):
 
 class Illustration(abstract.AbstractBaseModel):
     title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
-    method = models.ForeignKey("ArtForm", on_delete=models.PROTECT, verbose_name= _("method"), blank=True, null=True)
+    method = models.ForeignKey(ArtForm, on_delete=models.PROTECT, verbose_name= _("method"), blank=True, null=True)
     colour = models.BooleanField(verbose_name= _("colour"),blank=True, null=True)
     filename = models.CharField(max_length=255,verbose_name= _("file name"), blank=True, null=True)
     year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
-    archive_name = models.ForeignKey('Archive', on_delete=models.PROTECT, verbose_name= _("archive name"), blank=True, null=True)
+    archive_name = models.ForeignKey(Archive, on_delete=models.PROTECT, verbose_name= _("archive name"), blank=True, null=True)
     notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return f"{self.title}"
 
     class Meta:
         verbose_name = _("illustration")
@@ -95,7 +95,7 @@ class Person(abstract.AbstractBaseModel, GenderedMixin):
     notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
 
     def __str__(self):
-        return self.lastname
+        return f"{self.lastname}"
 
     class Meta:
         verbose_name = _("person")
@@ -112,7 +112,7 @@ class Place(abstract.AbstractBaseModel):
 
 
     def __str__(self):
-        return self.placename
+        return f"{self.placename}"
 
     class Meta:
         verbose_name = _("place")
@@ -127,7 +127,7 @@ class Publisher(abstract.AbstractBaseModel):
     endyear = models.IntegerField(verbose_name= _("end year"), blank=True, null=True)
     notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
     def __str__(self):
-        return self.title
+        return f"{self.title}"
 
     class Meta:
         verbose_name = _("publisher")
@@ -149,11 +149,11 @@ class SagaText(abstract.AbstractBaseModel):
     filename = models.CharField(max_length=255, verbose_name= _("file name"), blank=True, null=True)
     pages = models.IntegerField(verbose_name= _("pages"), blank=True, null=True)
     year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
-    archive_name = models.ForeignKey('Archive', verbose_name= _("archive name"), on_delete=models.PROTECT, blank=True, null=True)
+    archive_name = models.ForeignKey(Archive, verbose_name= _("archive name"), on_delete=models.PROTECT, blank=True, null=True)
     notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return f"{self.title}"
 
     class Meta:
         verbose_name = _("saga text")
@@ -162,13 +162,13 @@ class SagaText(abstract.AbstractBaseModel):
 class Series(abstract.AbstractBaseModel):
     name = models.CharField(max_length=255, verbose_name= _("name"), blank=True, null=True)
     title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
-    publisher_title = models.ForeignKey('Publisher', verbose_name= _("publisher title"), on_delete=models.PROTECT, blank=True, null=True)
+    publisher_title = models.ForeignKey(Publisher, verbose_name= _("publisher title"), on_delete=models.PROTECT, blank=True, null=True)
     startyear = models.IntegerField(verbose_name= _("startyear"), blank=True, null=True)
     endyear = models.IntegerField(verbose_name= _("endyear"), blank=True, null=True)
     notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     class Meta:
         verbose_name = _("series")
@@ -183,11 +183,11 @@ class Volume(abstract.AbstractBaseModel):
     isbn = models.CharField(max_length=255, verbose_name= _("isbn"), blank=True, null=True)
     libris = models.CharField(max_length=255, verbose_name= _("libris"), blank=True, null=True)
     litteraturbanken = models.CharField(max_length=255, verbose_name= _("litteraturbanken"), blank=True, null=True)
-    series_name = models.ForeignKey('Series', on_delete=models.PROTECT, verbose_name= _("series name"), blank=True, null=True)
+    series_name = models.ForeignKey(Series, on_delete=models.PROTECT, verbose_name= _("series name"), blank=True, null=True)
     notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     class Meta:
         verbose_name = _("volume")
@@ -198,7 +198,7 @@ class Role(abstract.AbstractBaseModel):
     role_name = models.CharField(verbose_name= _("role"), max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.role_name
+        return f"{self.role_name}"
 
     class Meta:
         verbose_name = _("role")
@@ -206,22 +206,22 @@ class Role(abstract.AbstractBaseModel):
 
 # Do we need AbstractBaseModel or simple model?     
 class RelIllustrEdition(models.Model):
-    illustration_title = models.ForeignKey('Illustration', verbose_name= _("illustration title"), on_delete=models.PROTECT, null=True)
-    edition_title = models.ForeignKey('Edition',verbose_name= _("edition title"), on_delete=models.PROTECT, null=True)
+    illustration_title = models.ForeignKey(Illustration, verbose_name= _("illustration title"), on_delete=models.PROTECT, null=True)
+    edition_title = models.ForeignKey(Edition, verbose_name= _("edition title"), on_delete=models.PROTECT, null=True)
 
 
 class RelPersonIllustration(models.Model):
-    person_lastname = models.ForeignKey('Person', verbose_name= _("person lastname"), on_delete=models.PROTECT, null=True)
-    illustration_title = models.ForeignKey('Illustration', verbose_name= _("illustration title"), on_delete=models.PROTECT, null=True)
-    role = models.ForeignKey('Role', verbose_name= _("role"), on_delete=models.PROTECT, null=True)
+    person_lastname = models.ForeignKey(Person, verbose_name= _("person lastname"), on_delete=models.PROTECT, null=True)
+    illustration_title = models.ForeignKey(Illustration, verbose_name= _("illustration title"), on_delete=models.PROTECT, null=True)
+    role = models.ForeignKey(Role, verbose_name= _("role"), on_delete=models.PROTECT, null=True)
 
 
 class RelPersonText(models.Model):
-    person_lastname = models.ForeignKey('Person',verbose_name= _("person lastname"), on_delete=models.PROTECT, null=True)
-    sagatext_title = models.ForeignKey('SagaText',verbose_name= _("sagatext title"), on_delete=models.PROTECT, null=True)
-    role = models.ForeignKey('Role', verbose_name= _("role"), on_delete=models.PROTECT, null=True)
+    person_lastname = models.ForeignKey(Person,verbose_name= _("person lastname"), on_delete=models.PROTECT, null=True)
+    sagatext_title = models.ForeignKey(SagaText,verbose_name= _("sagatext title"), on_delete=models.PROTECT, null=True)
+    role = models.ForeignKey(Role, verbose_name= _("role"), on_delete=models.PROTECT, null=True)
 
 
 class RelTextEdition(models.Model):
-    sagatext_title = models.ForeignKey('SagaText',verbose_name= _("sagatext title"), on_delete=models.PROTECT, null=True)
-    edition_title = models.ForeignKey('Edition',verbose_name= _("edition title"), on_delete=models.PROTECT, null=True)
+    sagatext_title = models.ForeignKey(SagaText,verbose_name= _("sagatext title"), on_delete=models.PROTECT, null=True)
+    edition_title = models.ForeignKey(Edition,verbose_name= _("edition title"), on_delete=models.PROTECT, null=True)
