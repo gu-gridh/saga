@@ -198,7 +198,7 @@ class Role(abstract.AbstractBaseModel):
     role_name = models.CharField(verbose_name= _("role"), max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.role_name
 
     class Meta:
         verbose_name = _("role")
