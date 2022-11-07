@@ -206,22 +206,22 @@ class Role(abstract.AbstractBaseModel):
 
 # Do we need AbstractBaseModel or simple model?     
 class RelIllustrEdition(models.Model):
-    illustration_title = models.ForeignKey(Illustration, verbose_name= _("illustration title"), on_delete=models.PROTECT, null=True)
-    edition_title = models.ForeignKey(Edition, verbose_name= _("edition title"), on_delete=models.PROTECT, null=True)
+    illustration_title = models.ForeignKey(Illustration, verbose_name= _("illustration title"), on_delete=models.PROTECT, blank=True, null=True)
+    edition_title = models.ForeignKey(Edition, verbose_name= _("edition title"), on_delete=models.PROTECT, blank=True, null=True)
 
 
 class RelPersonIllustration(models.Model):
-    person_lastname = models.ForeignKey(Person, verbose_name= _("person lastname"), on_delete=models.PROTECT, null=True)
-    illustration_title = models.ForeignKey(Illustration, verbose_name= _("illustration title"), on_delete=models.PROTECT, null=True)
-    role = models.ForeignKey(Role, verbose_name= _("role"), on_delete=models.PROTECT, null=True)
+    person_lastname = models.ForeignKey(Person, verbose_name= _("person lastname"), on_delete=models.PROTECT, blank=True, null=True)
+    illustration_title = models.ForeignKey(Illustration, verbose_name= _("illustration title"), on_delete=models.PROTECT, blank=True, null=True)
+    role = models.ForeignKey(Role, verbose_name= _("role"), on_delete=models.PROTECT, blank=True, null=True)
 
 
 class RelPersonText(models.Model):
-    person_lastname = models.ForeignKey(Person,verbose_name= _("person lastname"), on_delete=models.PROTECT, null=True)
-    sagatext_title = models.ForeignKey(SagaText,verbose_name= _("sagatext title"), on_delete=models.PROTECT, null=True)
-    role = models.ForeignKey(Role, verbose_name= _("role"), on_delete=models.PROTECT, null=True)
+    person_lastname = models.ForeignKey(Person,verbose_name= _("person lastname"), on_delete=models.PROTECT, blank=True, null=True)
+    sagatext_title = models.ForeignKey(SagaText,verbose_name= _("sagatext title"), on_delete=models.PROTECT, blank=True, null=True)
+    role = models.ForeignKey(Role, verbose_name= _("role"), on_delete=models.PROTECT, blank=True, null=True)
 
 
 class RelTextEdition(models.Model):
-    sagatext_title = models.ForeignKey(SagaText,verbose_name= _("sagatext title"), on_delete=models.PROTECT, null=True)
-    edition_title = models.ForeignKey(Edition,verbose_name= _("edition title"), on_delete=models.PROTECT, null=True)
+    sagatext_title = models.ForeignKey(SagaText,verbose_name= _("sagatext title"), on_delete=models.PROTECT, blank=True, null=True)
+    edition_title = models.ForeignKey(Edition,verbose_name= _("edition title"), on_delete=models.PROTECT, blank=True, null=True)

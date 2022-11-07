@@ -18,6 +18,11 @@ class SagaArchiveAdmin(admin.ModelAdmin):
 class SagaPlaceAdmin(admin.ModelAdmin):
     list_display = get_fields(Place) 
 
+
+@admin.register(ArtForm)
+class SagaArtFormAdmin(admin.ModelAdmin):
+    list_display = get_fields(ArtForm) 
+
 @admin.register(Publisher)
 class SagaPublisherAdmin(admin.ModelAdmin):
     list_display = get_fields(Publisher) 
