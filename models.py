@@ -13,8 +13,8 @@ class Archive(abstract.AbstractBaseModel):
         ('S', 'Serie'),
         ('V', 'Volym'),
         ('O', 'Omslag'),
-        ('U', 'Underserie 1'),
-        ('U', 'Underserie 2')
+        ('U1', 'Underserie 1'),
+        ('U2', 'Underserie 2')
     )
 
     name = models.CharField(max_length=255, verbose_name= _("name"), null=True, blank=True)
@@ -43,6 +43,67 @@ class ArtForm(abstract.AbstractBaseModel):
         verbose_name_plural = _("art forms")
 
 
+class Role(abstract.AbstractBaseModel):
+    role_name = models.CharField(verbose_name= _("role"), max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.role_name}"
+
+    class Meta:
+        verbose_name = _("role")
+        verbose_name_plural = _("roles")
+
+    
+class Publisher(abstract.AbstractBaseModel):
+
+    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
+    place = models.CharField(max_length=255, verbose_name= _("place"), blank=True, null=True)
+    startyear = models.IntegerField(verbose_name= _("start year"), blank=True, null=True)
+    endyear = models.IntegerField(verbose_name= _("end year"), blank=True, null=True)
+    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
+    def __str__(self):
+        return f"{self.title}"
+
+    class Meta:
+        verbose_name = _("publisher")
+        verbose_name_plural = _("publishers")
+
+
+class Series(abstract.AbstractBaseModel):
+    name = models.CharField(max_length=255, verbose_name= _("name"), blank=True, null=True)
+    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
+    publisher_title = models.ForeignKey(Publisher, verbose_name= _("publisher title"), on_delete=models.PROTECT, blank=True, null=True)
+    startyear = models.IntegerField(verbose_name= _("startyear"), blank=True, null=True)
+    endyear = models.IntegerField(verbose_name= _("endyear"), blank=True, null=True)
+    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = _("series")
+        verbose_name_plural = _("series")
+
+
+class Volume(abstract.AbstractBaseModel):
+    name = models.CharField(max_length=255, verbose_name= _("name"), blank=True, null=True)
+    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
+    subtitle = models.CharField(max_length=255, verbose_name= _("subtitle"), blank=True, null=True)
+    year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
+    isbn = models.CharField(max_length=255, verbose_name= _("isbn"), blank=True, null=True)
+    libris = models.CharField(max_length=255, verbose_name= _("libris"), blank=True, null=True)
+    litteraturbanken = models.CharField(max_length=255, verbose_name= _("litteraturbanken"), blank=True, null=True)
+    series_name = models.ForeignKey(Series, on_delete=models.PROTECT, verbose_name= _("series name"), blank=True, null=True)
+    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = _("volume")
+        verbose_name_plural = _("volumes")
+
+
 class Edition(abstract.AbstractBaseModel):
 
     title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
@@ -62,6 +123,32 @@ class Edition(abstract.AbstractBaseModel):
     class Meta:
         verbose_name = _("edition")
         verbose_name_plural = _("editions")
+
+
+class SagaText(abstract.AbstractBaseModel):
+    VARIANT_CHOICE = (
+        ('T', 'Tryckt'),
+        ('M', 'Manus 1'),
+        ('M2', 'Manus 2'),
+        ('M3', 'Manus 3'),
+
+    )
+    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
+    originaltitle = models.CharField(max_length=255, verbose_name= _("original title"), blank=True, null=True)
+    langiso = models.CharField(max_length=4, verbose_name= _("langiso"), blank=True, null=True)
+    variant = models.CharField(max_length=255, choices=VARIANT_CHOICE, verbose_name= _("variant"), blank=True, null=True)
+    filename = models.CharField(max_length=255, verbose_name= _("file name"), blank=True, null=True)
+    pages = models.IntegerField(verbose_name= _("pages"), blank=True, null=True)
+    year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
+    archive_name = models.ForeignKey(Archive, verbose_name= _("archive name"), on_delete=models.PROTECT, blank=True, null=True)
+    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.title}"
+
+    class Meta:
+        verbose_name = _("saga text")
+        verbose_name_plural = _("saga texts")
 
 
 class Illustration(abstract.AbstractBaseModel):
@@ -118,91 +205,6 @@ class Place(abstract.AbstractBaseModel):
         verbose_name = _("place")
         verbose_name_plural = _("places")
 
-        
-class Publisher(abstract.AbstractBaseModel):
-
-    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
-    place = models.CharField(max_length=255, verbose_name= _("place"), blank=True, null=True)
-    startyear = models.IntegerField(verbose_name= _("start year"), blank=True, null=True)
-    endyear = models.IntegerField(verbose_name= _("end year"), blank=True, null=True)
-    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
-    def __str__(self):
-        return f"{self.title}"
-
-    class Meta:
-        verbose_name = _("publisher")
-        verbose_name_plural = _("publishers")
-
-
-class SagaText(abstract.AbstractBaseModel):
-    VARIANT_CHOICE = (
-        ('T', 'Tryckt'),
-        ('M', 'Manus 1'),
-        ('M2', 'Manus 2'),
-        ('M3', 'Manus 3'),
-
-    )
-    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
-    originaltitle = models.CharField(max_length=255, verbose_name= _("original title"), blank=True, null=True)
-    langiso = models.CharField(max_length=4, verbose_name= _("langiso"), blank=True, null=True)
-    variant = models.CharField(max_length=255, choices=VARIANT_CHOICE, verbose_name= _("variant"), blank=True, null=True)
-    filename = models.CharField(max_length=255, verbose_name= _("file name"), blank=True, null=True)
-    pages = models.IntegerField(verbose_name= _("pages"), blank=True, null=True)
-    year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
-    archive_name = models.ForeignKey(Archive, verbose_name= _("archive name"), on_delete=models.PROTECT, blank=True, null=True)
-    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.title}"
-
-    class Meta:
-        verbose_name = _("saga text")
-        verbose_name_plural = _("saga texts")
-
-class Series(abstract.AbstractBaseModel):
-    name = models.CharField(max_length=255, verbose_name= _("name"), blank=True, null=True)
-    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
-    publisher_title = models.ForeignKey(Publisher, verbose_name= _("publisher title"), on_delete=models.PROTECT, blank=True, null=True)
-    startyear = models.IntegerField(verbose_name= _("startyear"), blank=True, null=True)
-    endyear = models.IntegerField(verbose_name= _("endyear"), blank=True, null=True)
-    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.name}"
-
-    class Meta:
-        verbose_name = _("series")
-        verbose_name_plural = _("series")
-
-
-class Volume(abstract.AbstractBaseModel):
-    name = models.CharField(max_length=255, verbose_name= _("name"), blank=True, null=True)
-    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
-    subtitle = models.CharField(max_length=255, verbose_name= _("subtitle"), blank=True, null=True)
-    year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
-    isbn = models.CharField(max_length=255, verbose_name= _("isbn"), blank=True, null=True)
-    libris = models.CharField(max_length=255, verbose_name= _("libris"), blank=True, null=True)
-    litteraturbanken = models.CharField(max_length=255, verbose_name= _("litteraturbanken"), blank=True, null=True)
-    series_name = models.ForeignKey(Series, on_delete=models.PROTECT, verbose_name= _("series name"), blank=True, null=True)
-    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.name}"
-
-    class Meta:
-        verbose_name = _("volume")
-        verbose_name_plural = _("volumes")
-
-
-class Role(abstract.AbstractBaseModel):
-    role_name = models.CharField(verbose_name= _("role"), max_length=255, blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.role_name}"
-
-    class Meta:
-        verbose_name = _("role")
-        verbose_name_plural = _("roles")
 
 # Do we need AbstractBaseModel or simple model?     
 class RelIllustrEdition(models.Model):
