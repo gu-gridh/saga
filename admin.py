@@ -1,12 +1,9 @@
 from pydoc import Doc
-from django.contrib import admin
-from django.contrib.gis.db import models
+from django.contrib import admin, sites
 from .models import *
-import diana.abstract.models
+from diana.abstract.admin_view import *
 from diana.abstract.models import DEFAULT_EXCLUDE, DEFAULT_FIELDS, get_fields
 from django.contrib.gis import admin
-from django.contrib.admin.widgets import AdminFileWidget
-from django.utils.safestring import mark_safe
 
 
 # Register your models here.
@@ -14,14 +11,13 @@ from django.utils.safestring import mark_safe
 class SagaArchiveAdmin(admin.ModelAdmin):
     list_display = get_fields(Archive, exclude=DEFAULT_EXCLUDE+["id"])
 
-@admin.register(Place)
-class SagaPlaceAdmin(admin.ModelAdmin):
-    list_display = get_fields(Place) 
-
-
 @admin.register(ArtForm)
 class SagaArtFormAdmin(admin.ModelAdmin):
     list_display = get_fields(ArtForm) 
+
+@admin.register(Role)
+class SagaRoleAdmin(admin.ModelAdmin):
+    list_display = get_fields(Role) 
 
 @admin.register(Publisher)
 class SagaPublisherAdmin(admin.ModelAdmin):
@@ -35,9 +31,9 @@ class SagaSeriesAdmin(admin.ModelAdmin):
 class SagaVolumeAdmin(admin.ModelAdmin):
     list_display = get_fields(Volume) 
 
-@admin.register(Role)
-class SagaRoleAdmin(admin.ModelAdmin):
-    list_display = get_fields(Role) 
+@admin.register(Place)
+class SagaPlaceAdmin(admin.ModelAdmin):
+    list_display = get_fields(Place) 
 
 
 class RelIllustrEditionAdmin(admin.TabularInline):
@@ -90,3 +86,10 @@ admin.site.register(Edition, SagaEditionAdmin)
 admin.site.register(Illustration, SagaIllustrationAdmin)
 admin.site.register(Person, SagaPersonAdmin)
 admin.site.register(SagaText, SagaTextAdmin)
+
+
+ordering = ["Archives", "Art forms", "Roles", "Publishers", "Series", "Volumes", "Editions", "Saga texts", "Illustrations", "Persons", "Places" ]
+
+
+a = get_apps_order('Saga', ordering)
+print(a)
