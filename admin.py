@@ -92,4 +92,3 @@ ordering = ["Archives", "Art forms", "Roles", "Publishers", "Series", "Volumes",
 
 
 a = get_apps_order('Saga', ordering)
-print(a)
