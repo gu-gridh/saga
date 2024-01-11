@@ -90,7 +90,7 @@ admin.site.register(Person, SagaPersonAdmin)
 admin.site.register(SagaText, SagaTextAdmin)
 
 
-ordering = ["Archives", "Art forms", "Roles", "Publishers", "Series", "Volumes", "Editions",  "Saga texts", "Illustrations", "Persons", "Places" ]
+# ordering = ["Archives", "Art forms", "Roles", "Publishers", "Series", "Volumes", "Editions",  "Saga texts", "Illustrations", "Persons", "Places" ]
 
 
-a = get_apps_order('Saga', ordering)
+# a = get_apps_order('Saga', ordering)

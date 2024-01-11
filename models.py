@@ -90,7 +90,7 @@ class Series(abstract.AbstractBaseModel):
     notes = models.TextField(verbose_name= _("anteckningar"), blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.title}"
 
     class Meta:
         verbose_name = _("publikationsserie")
@@ -123,19 +123,19 @@ class Edition(abstract.AbstractBaseModel):
         ('M', 'Obetydliga revideringar'),
         ('S', 'Små revideringar'),
         ('L', 'Stora revideringar')
-)
+    )
     title = models.CharField(max_length=255, verbose_name= _("Titel"), blank=True, null=True)
     subtitle = models.CharField(max_length=255, verbose_name= _("Undertitel"), blank=True, null=True)
     year = models.IntegerField(verbose_name= _("Utgivningsår"), blank=True, null=True)
     volume_name = models.ForeignKey('Volume', on_delete=models.PROTECT, verbose_name= _("Publikationsserienr"), blank=True, null=True)
     version = models.IntegerField(verbose_name= _("Upplaga"), blank=True, null=True)
-    make_id = models.ForeignKey(Make, on_delete=models.PROTECT, verbose_name= _("Utförande"), blank=True, null=True) 
+    make_id = models.ForeignKey(MakeForm, on_delete=models.PROTECT, verbose_name= _("Utförande"), blank=True, null=True) 
     preface = models.TextField(blank=True, verbose_name= _("Text titelsida"), null=True)
     backtext = models.TextField(verbose_name= _("Text baksida"), blank=True, null=True)
     # paratext = models.TextField(verbose_name= _("para text"), blank=True, null=True)
     # num = models.IntegerField(verbose_name= _("num"), blank=True, null=True)
-    publisher_id = models.ForeignKey(Publisher, verbose_name= _("Utgivare"), on_delete=models.PROTECT, blank=True, null=True)
-    printer_id = models.ForeignKey(Publisher, verbose_name= _("Tryckeri"), on_delete=models.PROTECT, blank=True, null=True)
+    publisher_id = models.ForeignKey(Publisher, verbose_name= _("Utgivare"), related_name= 'saga_publisher_id', on_delete=models.PROTECT, blank=True, null=True)
+    printer_id = models.ForeignKey(Publisher, verbose_name= _("Tryckeri"), related_name= 'saga_printer_id', on_delete=models.PROTECT, blank=True, null=True)
     pages = models.IntegerField(verbose_name= _("Antal sidor"), blank=True, null=True)
     height = models.IntegerField(verbose_name= _("Format höjd (mm)"), blank=True, null=True)
     width = models.IntegerField(verbose_name= _("Format breddn (mm)"), blank=True, null=True)
@@ -157,10 +157,10 @@ class Edition(abstract.AbstractBaseModel):
         verbose_name = _("Upplaga")
         verbose_name_plural = _("Upplagor")
 
-    class Work(abstract.AbstractBaseModel):
-        title = models.CharField(max_length=255, verbose_name= _("titel"), blank=True, null=True)
-        author_id = models.ForeignKey(Series, on_delete=models.PROTECT, verbose_name= _("Författare"), blank=True, null=True)
-        notes = models.TextField(verbose_name= _("Interna anteckningar"), blank=True, null=True)
+class Work(abstract.AbstractBaseModel):
+    title = models.CharField(max_length=255, verbose_name= _("titel"), blank=True, null=True)
+    author_id = models.ForeignKey(Series, on_delete=models.PROTECT, verbose_name= _("Författare"), blank=True, null=True)
+    notes = models.TextField(verbose_name= _("Interna anteckningar"), blank=True, null=True)
 
     def __str__(self):
         return f"{self.title}"
@@ -169,21 +169,21 @@ class Edition(abstract.AbstractBaseModel):
         verbose_name = _("Verk")
         verbose_name_plural = _("Verk")
 
-    class SagaText(abstract.AbstractBaseModel):
-        title = models.CharField(max_length=255, verbose_name= _("Titel"), blank=True, null=True)
-        subtitle = models.CharField(max_length=255, verbose_name= _("Undertitel"), blank=True, null=True)
-        originaltitle = models.CharField(max_length=255, verbose_name= _("Originaltitel"), blank=True, null=True)
-        langiso = models.CharField(max_length=4, verbose_name= _("Språk ISO"), blank=True, null=True)
-        # variant = models.CharField(max_length=255, choices=VARIANT_CHOICE, verbose_name= _("variant"), blank=True, null=True)
-        # filename = models.CharField(max_length=255, verbose_name= _("file name"), blank=True, null=True)
-        startpage = models.IntegerField(verbose_name= _("Startsida"), blank=True, null=True)
-        endpage = models.IntegerField(verbose_name= _("Slutsida"), blank=True, null=True)
-        archive_name = models.ForeignKey(Archive, verbose_name= _("Arkiv-ID"), on_delete=models.PROTECT, blank=True, null=True)
-        notes = models.TextField(verbose_name= _("Anteckningar"), blank=True, null=True)
-        internal_notes = models.TextField(verbose_name= _("Interna anteckningar"), blank=True, null=True)
-        num_images = models.IntegerField(verbose_name= _("Antal illustrationer"), blank=True, null=True)
-        image_notes = models.TextField(verbose_name= _("Anteckningar för illustrationer"), blank=True, null=True)
-        edition_id = models.ForeignKey(Edition, verbose_name= _("Upplaga"), on_delete=models.PROTECT, blank=True, null=True)
+class SagaText(abstract.AbstractBaseModel):
+    title = models.CharField(max_length=255, verbose_name= _("Titel"), blank=True, null=True)
+    subtitle = models.CharField(max_length=255, verbose_name= _("Undertitel"), blank=True, null=True)
+    originaltitle = models.CharField(max_length=255, verbose_name= _("Originaltitel"), blank=True, null=True)
+    langiso = models.CharField(max_length=4, verbose_name= _("Språk ISO"), blank=True, null=True)
+    # variant = models.CharField(max_length=255, choices=VARIANT_CHOICE, verbose_name= _("variant"), blank=True, null=True)
+    # filename = models.CharField(max_length=255, verbose_name= _("file name"), blank=True, null=True)
+    startpage = models.IntegerField(verbose_name= _("Startsida"), blank=True, null=True)
+    endpage = models.IntegerField(verbose_name= _("Slutsida"), blank=True, null=True)
+    archive_name = models.ForeignKey(Archive, verbose_name= _("Arkiv-ID"), on_delete=models.PROTECT, blank=True, null=True)
+    notes = models.TextField(verbose_name= _("Anteckningar"), blank=True, null=True)
+    internal_notes = models.TextField(verbose_name= _("Interna anteckningar"), blank=True, null=True)
+    num_images = models.IntegerField(verbose_name= _("Antal illustrationer"), blank=True, null=True)
+    image_notes = models.TextField(verbose_name= _("Anteckningar för illustrationer"), blank=True, null=True)
+    edition_id = models.ForeignKey(Edition, verbose_name= _("Upplaga"), on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return f"{self.title}"
@@ -192,14 +192,14 @@ class Edition(abstract.AbstractBaseModel):
         verbose_name = _("Tryckt text")
         verbose_name_plural = _("Tryckta texter")
 
-    class Illustration(abstract.AbstractBaseModel):
-        title = models.CharField(max_length=255, verbose_name= _("titel"), blank=True, null=True)
-        method = models.ForeignKey(ArtForm, on_delete=models.PROTECT, verbose_name= _("Konstnärlig teknik"), blank=True, null=True)
-        colour = models.BooleanField(verbose_name= _("Färg, ja)"),blank=True, null=True)
-        # filename = models.CharField(max_length=255,verbose_name= _("file name"), blank=True, null=True)
-        year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
-        archive_name = models.ForeignKey(Archive, on_delete=models.PROTECT, verbose_name= _("Arkivbeteckning"), blank=True, null=True)
-        notes = models.TextField(verbose_name= _("Anteckningar"), blank=True, null=True)
+class Illustration(abstract.AbstractBaseModel):
+    title = models.CharField(max_length=255, verbose_name= _("titel"), blank=True, null=True)
+    method = models.ForeignKey(ArtForm, on_delete=models.PROTECT, verbose_name= _("Konstnärlig teknik"), blank=True, null=True)
+    colour = models.BooleanField(verbose_name= _("Färg, ja)"),blank=True, null=True)
+    # filename = models.CharField(max_length=255,verbose_name= _("file name"), blank=True, null=True)
+    year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
+    archive_name = models.ForeignKey(Archive, on_delete=models.PROTECT, verbose_name= _("Arkivbeteckning"), blank=True, null=True)
+    notes = models.TextField(verbose_name= _("Anteckningar"), blank=True, null=True)
 
     def __str__(self):
         return f"{self.title}"
