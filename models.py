@@ -81,7 +81,7 @@ class Publisher(abstract.AbstractBaseModel):
 
 
 class Series(abstract.AbstractBaseModel):
-    # name = models.CharField(max_length=255, verbose_name= _("name"), blank=True, null=True)
+    name = models.CharField(max_length=255, verbose_name= _("name"), blank=True, null=True)
     title = models.CharField(max_length=255, verbose_name= _("titel"), blank=True, null=True)
     subtitle = models.CharField(max_length=255, verbose_name= _("undertitel"), blank=True, null=True)
     publisher_title = models.ForeignKey(Publisher, verbose_name= _("förlag"), on_delete=models.PROTECT, blank=True, null=True)
@@ -102,8 +102,8 @@ class Volume(abstract.AbstractBaseModel):
     title = models.CharField(max_length=255, verbose_name= _("titel"), blank=True, null=True)
     subtitle = models.CharField(max_length=255, verbose_name= _("undertitel"), blank=True, null=True)
     year = models.IntegerField(verbose_name= _("utgivningsår"), blank=True, null=True)
-    # isbn = models.CharField(max_length=255, verbose_name= _("isbn"), blank=True, null=True)
-    # libris = models.CharField(max_length=255, verbose_name= _("libris"), blank=True, null=True)
+    isbn = models.CharField(max_length=255, verbose_name= _("isbn"), blank=True, null=True)
+    libris = models.CharField(max_length=255, verbose_name= _("libris"), blank=True, null=True)
     litteraturbanken = models.CharField(max_length=255, verbose_name= _("Litteraturbanken"), blank=True, null=True)
     series_name = models.ForeignKey(Series, on_delete=models.PROTECT, verbose_name= _("publikationsserie"), blank=True, null=True)
     notes = models.TextField(verbose_name= _("Sagas stora katalog"), blank=True, null=True)
@@ -132,8 +132,8 @@ class Edition(abstract.AbstractBaseModel):
     make_id = models.ForeignKey(MakeForm, on_delete=models.PROTECT, verbose_name= _("Utförande"), blank=True, null=True) 
     preface = models.TextField(blank=True, verbose_name= _("Text titelsida"), null=True)
     backtext = models.TextField(verbose_name= _("Text baksida"), blank=True, null=True)
-    # paratext = models.TextField(verbose_name= _("para text"), blank=True, null=True)
-    # num = models.IntegerField(verbose_name= _("num"), blank=True, null=True)
+    paratext = models.TextField(verbose_name= _("para text"), blank=True, null=True)
+    num = models.IntegerField(verbose_name= _("num"), blank=True, null=True)
     publisher_id = models.ForeignKey(Publisher, verbose_name= _("Utgivare"), related_name= 'saga_publisher_id', on_delete=models.PROTECT, blank=True, null=True)
     printer_id = models.ForeignKey(Publisher, verbose_name= _("Tryckeri"), related_name= 'saga_printer_id', on_delete=models.PROTECT, blank=True, null=True)
     pages = models.IntegerField(verbose_name= _("Antal sidor"), blank=True, null=True)
@@ -170,11 +170,17 @@ class Work(abstract.AbstractBaseModel):
         verbose_name_plural = _("Verk")
 
 class SagaText(abstract.AbstractBaseModel):
+    VARIANT_CHOICE = (
+        ('T', 'Tryckt'),
+        ('M', 'Manus 1'),
+        ('M2', 'Manus 2'),
+        ('M3', 'Manus 3'),
+    )
     title = models.CharField(max_length=255, verbose_name= _("Titel"), blank=True, null=True)
     subtitle = models.CharField(max_length=255, verbose_name= _("Undertitel"), blank=True, null=True)
     originaltitle = models.CharField(max_length=255, verbose_name= _("Originaltitel"), blank=True, null=True)
     langiso = models.CharField(max_length=4, verbose_name= _("Språk ISO"), blank=True, null=True)
-    # variant = models.CharField(max_length=255, choices=VARIANT_CHOICE, verbose_name= _("variant"), blank=True, null=True)
+    variant = models.CharField(max_length=255, choices=VARIANT_CHOICE, verbose_name= _("variant"), blank=True, null=True)
     # filename = models.CharField(max_length=255, verbose_name= _("file name"), blank=True, null=True)
     startpage = models.IntegerField(verbose_name= _("Startsida"), blank=True, null=True)
     endpage = models.IntegerField(verbose_name= _("Slutsida"), blank=True, null=True)
