@@ -119,19 +119,6 @@ class Volume(abstract.AbstractBaseModel):
 
 
 class Edition(abstract.AbstractBaseModel):
-
-    title = models.CharField(max_length=255, verbose_name= _("title"), blank=True, null=True)
-    preface = models.TextField(blank=True, verbose_name= _("pre-face"), null=True)
-    backtext = models.TextField(verbose_name= _("back text"), blank=True, null=True)
-    paratext = models.TextField(verbose_name= _("para text"), blank=True, null=True)
-    num = models.IntegerField(verbose_name= _("num"), blank=True, null=True)
-    pages = models.IntegerField(verbose_name= _("pages"), blank=True, null=True)
-    year = models.IntegerField(verbose_name= _("year"), blank=True, null=True)
-    libris = models.CharField(max_length=255, verbose_name= _("libris"), blank=True, null=True)
-    volume_name = models.ForeignKey('Volume', on_delete=models.PROTECT, verbose_name= _("volume name"), blank=True, null=True)
-    notes = models.TextField(verbose_name= _("notes"), blank=True, null=True)
-
-class Edition(abstract.AbstractBaseModel):
     REVISION_CHOICE = (
         ('M', 'Obetydliga revideringar'),
         ('S', 'Små revideringar'),
