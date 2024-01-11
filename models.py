@@ -18,7 +18,7 @@ class Archive(abstract.AbstractBaseModel):
     )
 
     name = models.CharField(max_length=255, verbose_name= _("digital arkivbeteckning"), null=True, blank=True)
-    name2 = models.CharField(max_length=255, verbose_name= _("analog arkivbeteckning"), null=True, blank=True)
+    #name2 = models.CharField(max_length=255, verbose_name= _("analog arkivbeteckning"), null=True, blank=True)
     title = models.CharField(max_length=255, verbose_name= _("beskrivning"), null=True, blank=True)
     level = models.CharField(max_length=4, choices=LEVEL_CHOICE, verbose_name= _("nivå"), null=True, blank=True)
     parent_name = models.ForeignKey('Archive', on_delete=models.PROTECT, verbose_name= _("överordnad nivå"), null=True, blank=True)
@@ -83,7 +83,7 @@ class Publisher(abstract.AbstractBaseModel):
 class Series(abstract.AbstractBaseModel):
     name = models.CharField(max_length=255, verbose_name= _("name"), blank=True, null=True)
     title = models.CharField(max_length=255, verbose_name= _("titel"), blank=True, null=True)
-    subtitle = models.CharField(max_length=255, verbose_name= _("undertitel"), blank=True, null=True)
+    #subtitle = models.CharField(max_length=255, verbose_name= _("undertitel"), blank=True, null=True)
     publisher_title = models.ForeignKey(Publisher, verbose_name= _("förlag"), on_delete=models.PROTECT, blank=True, null=True)
     startyear = models.IntegerField(verbose_name= _("startår"), blank=True, null=True)
     endyear = models.IntegerField(verbose_name= _("slutår"), blank=True, null=True)
@@ -100,7 +100,7 @@ class Series(abstract.AbstractBaseModel):
 class Volume(abstract.AbstractBaseModel):
     name = models.CharField(max_length=255, verbose_name= _("volymnummer"), blank=True, null=True)
     title = models.CharField(max_length=255, verbose_name= _("titel"), blank=True, null=True)
-    subtitle = models.CharField(max_length=255, verbose_name= _("undertitel"), blank=True, null=True)
+    #subtitle = models.CharField(max_length=255, verbose_name= _("undertitel"), blank=True, null=True)
     year = models.IntegerField(verbose_name= _("utgivningsår"), blank=True, null=True)
     isbn = models.CharField(max_length=255, verbose_name= _("isbn"), blank=True, null=True)
     libris = models.CharField(max_length=255, verbose_name= _("libris"), blank=True, null=True)
@@ -125,7 +125,7 @@ class Edition(abstract.AbstractBaseModel):
         ('L', 'Stora revideringar')
     )
     title = models.CharField(max_length=255, verbose_name= _("Titel"), blank=True, null=True)
-    subtitle = models.CharField(max_length=255, verbose_name= _("Undertitel"), blank=True, null=True)
+    #subtitle = models.CharField(max_length=255, verbose_name= _("Undertitel"), blank=True, null=True)
     year = models.IntegerField(verbose_name= _("Utgivningsår"), blank=True, null=True)
     volume_name = models.ForeignKey('Volume', on_delete=models.PROTECT, verbose_name= _("Publikationsserienr"), blank=True, null=True)
     version = models.IntegerField(verbose_name= _("Upplaga"), blank=True, null=True)
@@ -177,7 +177,7 @@ class SagaText(abstract.AbstractBaseModel):
         ('M3', 'Manus 3'),
     )
     title = models.CharField(max_length=255, verbose_name= _("Titel"), blank=True, null=True)
-    subtitle = models.CharField(max_length=255, verbose_name= _("Undertitel"), blank=True, null=True)
+    #subtitle = models.CharField(max_length=255, verbose_name= _("Undertitel"), blank=True, null=True)
     originaltitle = models.CharField(max_length=255, verbose_name= _("Originaltitel"), blank=True, null=True)
     langiso = models.CharField(max_length=4, verbose_name= _("Språk ISO"), blank=True, null=True)
     variant = models.CharField(max_length=255, choices=VARIANT_CHOICE, verbose_name= _("variant"), blank=True, null=True)
@@ -226,7 +226,7 @@ class Person(abstract.AbstractBaseModel, GenderedMixin):
     deathplace = models.CharField(max_length=255, verbose_name= _("Dödsort"), blank=True, null=True)
     wikidata = models.CharField(max_length=255, verbose_name= _("Wikidata ID"), blank=True, null=True)
     librisxl = models.CharField(max_length=255, verbose_name= _("Libris"), blank=True, null=True)
-    article = models.TextField(verbose_name= _("Artikel"), blank=True, null=True)
+    #article = models.TextField(verbose_name= _("Artikel"), blank=True, null=True)
     notes = models.TextField(verbose_name= _("Anteckningar"), blank=True, null=True)
 
     def __str__(self):
