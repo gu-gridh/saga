@@ -73,6 +73,8 @@ class SagaPersonAdmin(admin.ModelAdmin):
             RelPersonIllustrationAdmin, 
             RelPersonTextAdmin,
             ]
+class SagaWorkAdmin(admin.ModelAdmin):
+    list_display = get_fields(Work, exclude=DEFAULT_EXCLUDE+["id"])
 
 class SagaTextAdmin(admin.ModelAdmin):
     list_display = get_fields(SagaText, exclude=DEFAULT_EXCLUDE+["id"])  
@@ -88,7 +90,7 @@ admin.site.register(Person, SagaPersonAdmin)
 admin.site.register(SagaText, SagaTextAdmin)
 
 
-ordering = ["Archives", "Art forms", "Roles", "Publishers", "Series", "Volumes", "Editions", "Saga texts", "Illustrations", "Persons", "Places" ]
+ordering = ["Archives", "Art forms", "Roles", "Publishers", "Series", "Volumes", "Editions",  "Saga texts", "Illustrations", "Persons", "Places" ]
 
 
 a = get_apps_order('Saga', ordering)
